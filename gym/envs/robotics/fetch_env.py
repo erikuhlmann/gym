@@ -150,17 +150,23 @@ class FetchEnv(robot_env.RobotEnv):
             assert object_qpos.shape == (7,)
             object_qpos[:2] = object_xpos
             self.sim.data.set_joint_qpos('object0:joint', object_qpos)
+        else:
+            object_qpos = np.zeros((7,))
 
         # randomize obstacle
-        if True:
-            object_xpos = self.initial_gripper_xpos[:2]
-            while np.linalg.norm(object_xpos - self.initial_gripper_xpos[:2]) < 0.1:
-                object_xpos = self.initial_gripper_xpos[:2] + self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
-            object_qpos = self.sim.data.get_joint_qpos('obstacle0:joint')
-            assert object_qpos.shape == (7,)
-            object_qpos[:2] = object_xpos
-            object_qpos[2] = 0.5
-            self.sim.data.set_joint_qpos('obstacle0:joint', object_qpos)
+        # search for a good orientation that doesn't intersect the puck's table position
+        while True:
+            obs_xpos = self.initial_gripper_xpos[:2]
+            while np.linalg.norm(obs_xpos - self.initial_gripper_xpos[:2]) < 0.1:
+                obs_xpos = self.initial_gripper_xpos[:2] + self.np_random.uniform(-self.obj_range, self.obj_range, size=2)
+            obs_qpos = self.sim.data.get_joint_qpos('obstacle0:joint')
+            assert obs_qpos.shape == (7,)
+            obs_qpos[:2] = obs_xpos
+            obs_qpos[2] = 0.5
+            self.sim.data.set_joint_qpos('obstacle0:joint', obs_qpos)
+            # obstacle is 0.05 x 0.05 -- add a bit of margin for the puck radius
+            if abs(obs_qpos[0] - object_qpos[0]) >= 0.07 and abs(obs_qpos[1] - object_qpos[1]) > 0.07:
+                break
 
         self.sim.forward()
         return True
