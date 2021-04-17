@@ -38,7 +38,7 @@ class RobotEnv(gym.GoalEnv):
 
         self.goal = self._sample_goal()
         obs = self._get_obs()
-        self.action_space = spaces.Box(-1., 1., shape=(n_actions,), dtype='float32')
+        self.action_space = spaces.Box(np.array([-1.6056, -1.221, -np.pi, -2.251, -2.16, -np.pi]), np.array([1.6056, 1.5186, np.pi, 2.251, 2.16, np.pi]), shape=(6,), dtype='float32')
         self.observation_space = spaces.Dict(dict(
             desired_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),
             achieved_goal=spaces.Box(-np.inf, np.inf, shape=obs['achieved_goal'].shape, dtype='float32'),

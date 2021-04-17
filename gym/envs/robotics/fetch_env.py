@@ -44,7 +44,7 @@ class FetchEnv(robot_env.RobotEnv):
         self.reward_type = reward_type
 
         super(FetchEnv, self).__init__(
-            model_path=model_path, n_substeps=n_substeps, n_actions=4,
+            model_path=model_path, n_substeps=n_substeps, n_actions=6,
             initial_qpos=initial_qpos)
 
     # GoalEnv methods

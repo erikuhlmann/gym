@@ -30,7 +30,9 @@ class FetchSlideEnv(fetch_env.FetchEnv, utils.EzPickle):
             'robot0:shoulder_pan_joint': action[0],
             'robot0:shoulder_lift_joint': action[1],
             'robot0:upperarm_roll_joint': action[2],
-            'robot0:elbow_flex_joint': action[3]
+            'robot0:elbow_flex_joint': action[3],
+            'robot0:wrist_flex_joint': action[4],
+            'robot0:wrist_roll_joint': action[5]
         }
         for name, value in qpos.items():
             self.sim.data.set_joint_qpos(name, value)
